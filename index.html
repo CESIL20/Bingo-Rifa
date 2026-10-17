@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bingo Rifa Premium</title>
+<meta name="description" content="Bingo rifa del 1 al 30 con cartones, pagos, QR y verificación.">
+<meta name="theme-color" content="#0a0912">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bingo Rifa">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="styles.css">
+<script src="lib/qrcode.js"></script>
+<script src="lib/JsBarcode.all.min.js"></script>
+</head>
+<body data-tab="juego">
+
+<header class="top">
+  <div class="brand">
+    <div class="logo">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="#e8c36a"/><circle cx="16" cy="16" r="8.5" fill="#fff6dc"/><text x="16" y="20.5" text-anchor="middle" font-size="12" font-weight="800" fill="#1a1424" font-family="system-ui,sans-serif">B</text></svg>
+    </div>
+    <div><h1>Bingo Rifa</h1><span>Edición Premium</span></div>
+  </div>
+  <div class="topr">
+    <button class="inst" id="install" hidden>⬇ Instalar</button>
+    <div class="vale"><small>CARTÓN · 5 NÚMEROS</small><b id="vale"></b></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="view" id="v-juego">
+    <div class="hero">
+      <small>Premio mayor</small>
+      <div class="big" id="hMax"></div>
+      <div class="pool" id="hPool"></div>
+      <div class="stats">
+        <div><b id="hSold">0/30</b><small>Vendidos</small></div>
+        <div><b id="hPaid">0</b><small>Pagados</small></div>
+        <div><b id="hCash">S/ 0</b><small>Recaudado</small></div>
+      </div>
+      <div class="bar"><i id="hBar"></i></div>
+      <small id="hProg"></small>
+    </div>
+
+    <div class="ladder" id="ladder"></div>
+
+    <div class="sect"><span>Tablero</span><small>Toca un número para marcar</small></div>
+    <div class="grid" id="grid"></div>
+
+    <div class="panel">
+      <div class="ball" id="ball">–</div>
+      <div class="recent" id="recent"></div>
+      <p class="msg" id="msg">Toca “Tirar bola” para empezar.</p>
+      <div class="row">
+        <button class="btn big" id="draw">Tirar bola</button>
+        <button class="btn sec" id="auto">▶ Auto</button>
+      </div>
+      <div class="row">
+        <button class="btn sec" id="undo">↩ Deshacer</button>
+        <button class="btn sec" id="reset">Reiniciar</button>
+      </div>
+      <p class="note">Cada bola marca un círculo del número. Al completar los 5, ese número gana el siguiente premio (solo si su cartón está pagado).</p>
+    </div>
+
+    <div class="panel">
+      <h2 class="h2">Organizador</h2>
+      <input id="host" class="inp" placeholder="Tu nombre" maxlength="30">
+      <input id="phone" class="inp" placeholder="Tu celular" maxlength="15" inputmode="tel" style="margin-bottom:0">
+    </div>
+  </section>
+
+  <div class="side">
+    <nav class="tabs" aria-label="Secciones">
+      <button data-t="juego" class="on">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.6"/></svg>Juego
+      </button>
+      <button data-t="cartones">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v3a2.5 2.5 0 0 0 0 5v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a2.5 2.5 0 0 0 0-5V6a1 1 0 0 1 1-1z"/><path d="M14.5 6.5v11" stroke-dasharray="2 2.4"/></svg>Cartones
+      </button>
+      <button data-t="verificar">
+        <svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z"/><path d="M8.6 12l2.4 2.4 4.4-4.8"/></svg>Verificar
+      </button>
+    </nav>
+
+    <section class="view" id="v-cartones">
+      <div class="panel">
+        <h2 class="h2">Métodos de pago</h2>
+        <div class="metodos" id="metodos"></div>
+      </div>
+      <div class="panel">
+        <h2 class="h2">Nuevo cartón</h2>
+        <input id="cName" class="inp" placeholder="Nombre del comprador" maxlength="30">
+        <input id="cNums" class="inp" placeholder="5 números (ej. 3, 12, 18, 25, 30)" inputmode="numeric">
+        <select id="cPay" class="inp"></select>
+        <p class="total" id="cTotal"></p>
+        <button class="btn" id="cAdd" style="width:100%">Crear cartón</button>
+        <p class="msg" id="cMsg" style="margin:10px 0 0"></p>
+      </div>
+      <div id="cards"></div>
+    </section>
+
+    <section class="view" id="v-verificar">
+      <div class="panel">
+        <h2 class="h2">Verificar cartón</h2>
+        <input id="vCode" class="inp" placeholder="Código o serie (ej. BR-0001-A1B2C3D4E5)">
+        <div class="row">
+          <button class="btn" id="vBtn">Verificar</button>
+          <button class="btn sec" id="vScan">📷 Escanear foto</button>
+        </div>
+        <div class="vout" id="vOut"></div>
+      </div>
+      <div class="panel" id="installCard">
+        <h2 class="h2">Instalar la app</h2>
+        <ol class="steps">
+          <li><b>Android o PC (Chrome/Edge):</b> toca “Instalar” arriba o el ícono de instalar en la barra de direcciones.</li>
+          <li><b>iPhone (Safari):</b> Compartir → “Añadir a pantalla de inicio”.</li>
+          <li>Después abre la app desde el ícono: funciona sin internet.</li>
+        </ol>
+      </div>
+      <p class="note">Los datos se guardan solo en este dispositivo.</p>
+    </section>
+  </div>
+</div>
+
+<input type="file" id="fProof" accept="image/*" hidden>
+<input type="file" id="vFile" accept="image/*" capture="environment" hidden>
+<div id="zoom"><img alt="Comprobante"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

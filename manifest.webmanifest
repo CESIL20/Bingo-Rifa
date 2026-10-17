@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "Bingo Rifa Premium",
+  "short_name": "Bingo Rifa",
+  "description": "Bingo rifa del 1 al 30 con cartones, pagos, QR y verificación.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a0912",
+  "theme_color": "#0a0912",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
